@@ -51,7 +51,7 @@ export function LoginForm() {
   });
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full shadow-lift">
       <CardHeader>
         <CardTitle>
           <span className="text-xl">Sign in to ACME Salary</span>
@@ -72,7 +72,7 @@ export function LoginForm() {
               {...form.register('password')}
             />
           </FormField>
-          <Button type="submit" disabled={login.isPending}>
+          <Button type="submit" className="mt-3" disabled={login.isPending}>
             {login.isPending ? 'Signing in…' : 'Sign in'}
           </Button>
         </form>

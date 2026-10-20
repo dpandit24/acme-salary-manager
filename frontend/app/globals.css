@@ -20,6 +20,7 @@
   --border: 214 32% 85%;
   --input: 214 32% 70%;
   --ring: 221 83% 45%;
+  --page: 220 33% 97%;
 }
 
 * {
@@ -27,13 +28,30 @@
 }
 
 body {
-  @apply bg-background text-foreground antialiased;
+  @apply bg-page text-foreground antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* The shared input classes use display:flex, which leaves dead space after a date input's calendar icon.
    Block layout lets Chrome put the icon at the right edge. */
 input[type='date'] {
   display: block;
+}
+
+.select-chevron {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1rem 1rem;
 }
 
 input[type='date']::-webkit-calendar-picker-indicator {

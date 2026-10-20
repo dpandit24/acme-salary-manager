@@ -12,6 +12,8 @@ import { use_meta } from '@/lib/hooks';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { TiltCard } from '@/components/ui/tilt-card';
+import { ArrowLeftIcon, BanknoteIcon } from '@/components/icons';
 import { StatusBadge } from '@/components/status-badge';
 import { EmptyState, ErrorState, LoadingState } from '@/components/state-messages';
 import { ProfileForm } from './profile-form';
@@ -48,34 +50,53 @@ function EmployeeDetailBody({ employee }: { employee: EmployeeDetail }) {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <Link href="/employees" className="text-sm text-primary underline-offset-4 hover:underline">
-          ← Back to employees
+        <Link
+          href="/employees"
+          className="group inline-flex items-center gap-1.5 text-sm text-primary underline-offset-4 hover:underline"
+        >
+          <ArrowLeftIcon className="size-4 transition-transform group-hover:-translate-x-0.5" />
+          Back to employees
         </Link>
-        <div className="mt-2 flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-semibold">
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <span
+            aria-hidden="true"
+            className="grid size-12 place-items-center rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-base font-semibold text-white shadow-sm"
+          >
+            {employee.first_name.charAt(0)}
+            {employee.last_name.charAt(0)}
+          </span>
+          <h1 className="text-3xl font-semibold tracking-tight">
             {employee.first_name} {employee.last_name}
           </h1>
           <StatusBadge status={employee.status} />
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="mt-2 text-sm text-muted-foreground">
           {employee.employee_number} · {employee.job_title} · {employee.level} · {employee.department} ·{' '}
           {employee.country_code} · hired {employee.hire_date}
         </p>
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <Card className="lg:col-span-1">
+        <TiltCard className="self-start lg:col-span-1">
+          <div className="h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-violet-500" aria-hidden="true" />
           <CardHeader>
-            <CardTitle>Current pay</CardTitle>
-            <CardDescription>Annual base in contract currency, as of today.</CardDescription>
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex flex-col gap-1.5">
+                <CardTitle>Current pay</CardTitle>
+                <CardDescription>Annual base in contract currency, as of today.</CardDescription>
+              </div>
+              <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-emerald-50 text-emerald-700 transition-transform duration-300 group-hover:scale-110">
+                <BanknoteIcon className="size-[18px]" />
+              </span>
+            </div>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pb-6">
             {current ? (
-              <div className="flex flex-col gap-1">
-                <p className="text-2xl font-semibold" data-testid="current-pay">
+              <div className="flex flex-col gap-2">
+                <p className="text-3xl font-semibold tracking-tight tabular-nums" data-testid="current-pay">
                   {format_money(current.amount_minor, current.currency)}
                 </p>
-                <p className="text-sm">
+                <p className="text-sm text-muted-foreground">
                   Effective from {current.effective_from} · {REASON_LABELS[current.reason] ?? current.reason}
                 </p>
               </div>
@@ -85,7 +106,7 @@ function EmployeeDetailBody({ employee }: { employee: EmployeeDetail }) {
               </p>
             )}
           </CardContent>
-        </Card>
+        </TiltCard>
 
         <Card className="lg:col-span-2">
           <CardHeader>
@@ -124,7 +145,7 @@ function EmployeeDetailBody({ employee }: { employee: EmployeeDetail }) {
                   <TableRow key={row.id}>
                     <TableCell className="whitespace-nowrap">
                       {row.effective_from}
-                      {current?.id === row.id ? <span className="ml-2 text-xs font-semibold">(current)</span> : null}
+                      {current?.id === row.id ? <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">(current)</span> : null}
                     </TableCell>
                     <TableCell className="whitespace-nowrap text-right tabular-nums">
                       {format_money(row.amount_minor, row.currency)}

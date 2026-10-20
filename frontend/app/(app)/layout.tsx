@@ -8,7 +8,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <Suspense fallback={<LoadingState />}>
       <AuthGuard>
         <AppHeader />
-        <main className="mx-auto max-w-7xl px-4 py-6">{children}</main>
+        <main className="mx-auto max-w-7xl animate-fade-up px-4 py-8">{children}</main>
       </AuthGuard>
     </Suspense>
   );

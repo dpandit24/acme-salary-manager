@@ -18,6 +18,7 @@ import { Select } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { FormAlert, FormField, field_aria } from '@/components/form-field';
 import { ErrorState, LoadingState } from '@/components/state-messages';
+import { ArrowLeftIcon } from '@/components/icons';
 
 const schema = z.object({
   employee_number: required_text('Employee number', 20),
@@ -62,11 +63,15 @@ export function AddEmployeeScreen() {
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <Link href="/employees" className="text-sm text-primary underline-offset-4 hover:underline">
-          ← Back to employees
+        <Link
+          href="/employees"
+          className="group inline-flex items-center gap-1.5 text-sm text-primary underline-offset-4 hover:underline"
+        >
+          <ArrowLeftIcon className="size-4 transition-transform group-hover:-translate-x-0.5" />
+          Back to employees
         </Link>
-        <h1 className="mt-2 text-2xl font-semibold">Add employee</h1>
-        <p className="text-sm text-muted-foreground">Creates the person and their opening salary together.</p>
+        <h1 className="mt-3 text-3xl font-semibold tracking-tight">Add employee</h1>
+        <p className="mt-1 text-sm text-muted-foreground">Creates the person and their opening salary together.</p>
       </div>
       {meta.isPending ? (
         <LoadingState label="Loading form options…" />

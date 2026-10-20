@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { StatusBadge } from '@/components/status-badge';
+import { PlusIcon } from '@/components/icons';
 import { EmptyState, ErrorState, LoadingState } from '@/components/state-messages';
 import { PAGE_SIZE, to_api_query, use_list_params, type ListParams } from './use-list-params';
 
@@ -72,17 +73,24 @@ export function EmployeeListScreen() {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold">Employees</h1>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">Directory</p>
+          <h1 className="mt-1 text-3xl font-semibold tracking-tight">Employees</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Search, filter and open anyone on the payroll.</p>
+        </div>
         <Button asChild>
-          <Link href="/employees/new">Add employee</Link>
+          <Link href="/employees/new">
+            <PlusIcon className="size-4" />
+            Add employee
+          </Link>
         </Button>
       </div>
 
       <form
         role="search"
         aria-label="Filter employees"
-        className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-6"
+        className="grid grid-cols-1 gap-3 rounded-xl border bg-card p-4 shadow-card sm:grid-cols-2 lg:grid-cols-6"
         onSubmit={(event) => {
           event.preventDefault();
           push_q(search);
@@ -160,13 +168,17 @@ export function EmployeeListScreen() {
               Updating…
             </p>
           ) : null}
-          <EmployeeTable items={list.data.items} params={params} on_sort={on_sort} />
-          <Pager
-            page={list.data.page}
-            page_size={list.data.page_size || PAGE_SIZE}
-            total={list.data.total}
-            on_page={(page) => update({ page }, { reset_page: false })}
-          />
+          <div className="overflow-hidden rounded-xl border bg-card shadow-card">
+            <EmployeeTable items={list.data.items} params={params} on_sort={on_sort} />
+            <div className="border-t bg-muted/40 px-4 py-3">
+              <Pager
+                page={list.data.page}
+                page_size={list.data.page_size || PAGE_SIZE}
+                total={list.data.total}
+                on_page={(page) => update({ page }, { reset_page: false })}
+              />
+            </div>
+          </div>
         </>
       )}
     </div>
@@ -275,8 +287,20 @@ function EmployeeTable({
           <TableRow key={item.id}>
             <TableCell className="whitespace-nowrap font-mono text-xs">{item.employee_number}</TableCell>
             <TableCell>
-              <Link href={`/employees/${item.id}`} className="font-medium text-primary underline-offset-4 hover:underline">
-                {item.first_name} {item.last_name}
+              <Link
+                href={`/employees/${item.id}`}
+                className="group/name inline-flex items-center gap-2.5 font-medium text-foreground transition-colors hover:text-primary"
+              >
+                <span
+                  aria-hidden="true"
+                  className="grid size-7 shrink-0 place-items-center rounded-full bg-primary/10 text-[11px] font-semibold text-primary transition-colors group-hover/name:bg-primary group-hover/name:text-primary-foreground"
+                >
+                  {item.first_name.charAt(0)}
+                  {item.last_name.charAt(0)}
+                </span>
+                <span className="underline-offset-4 group-hover/name:underline">
+                  {item.first_name} {item.last_name}
+                </span>
               </Link>
             </TableCell>
             <TableCell>{item.country_code}</TableCell>
@@ -321,7 +345,7 @@ function Pager({
   const last_page = Math.max(1, Math.ceil(total / page_size));
   return (
     <nav aria-label="Pagination" className="flex flex-wrap items-center justify-between gap-3">
-      <p className="text-sm" aria-live="polite">
+      <p className="text-sm text-muted-foreground" aria-live="polite">
         {format_count(start)}–{format_count(end)} of {format_count(total)}
       </p>
       <div className="flex gap-2">

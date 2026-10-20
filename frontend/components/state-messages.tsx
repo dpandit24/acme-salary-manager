@@ -4,7 +4,15 @@ import { is_api_error } from '@/lib/api/client';
 
 export function LoadingState({ label = 'Loading…' }: { label?: string }) {
   return (
-    <div role="status" aria-live="polite" className="py-10 text-center text-sm text-muted-foreground">
+    <div
+      role="status"
+      aria-live="polite"
+      className="flex items-center justify-center gap-3 py-12 text-sm text-muted-foreground"
+    >
+      <span
+        aria-hidden="true"
+        className="size-4 animate-spin rounded-full border-2 border-primary/25 border-t-primary"
+      />
       {label}
     </div>
   );
